@@ -17,7 +17,7 @@ namespace AspNetTicketBridge
         {
             var decoded = WebEncoders.Base64UrlDecode(token);
 
-            var unprotected = Unprotect(decoded, validationKey, decryptionKey, 
+            var unprotected = Unprotect(decoded, decryptionKey, validationKey,
                 "User.MachineKey.Protect",
                 "Microsoft.Owin.Security.OAuth", "Access_Token", "v1");
 
@@ -38,7 +38,7 @@ namespace AspNetTicketBridge
         {
             var decoded = WebEncoders.Base64UrlDecode(cookie);
 
-            var unprotected = Unprotect(decoded, validationKey, decryptionKey,
+            var unprotected = Unprotect(decoded, decryptionKey, validationKey,
                 "User.MachineKey.Protect", 
                 "Microsoft.Owin.Security.Cookies.CookieAuthenticationMiddleware", "ApplicationCookie", "v1");
 
