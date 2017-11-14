@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Dariel Marlow</Authors>
+    <Company>Degreed</Company>
+    <Description>Decrypts MachineKey protected AuthenticationTicket objects created by ASP.NET to be used in ASP.NET Core.</Description>
+    <PackageProjectUrl>https://github.com/dmarlow/AspNetTicketBridge</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dmarlow/AspNetTicketBridge.git</RepositoryUrl>
+    <Version>1.1.0</Version>
+    <PackageReleaseNotes>Adding ability to convert to new AuthenticationTicket version (v5).</PackageReleaseNotes>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>AspNetTicketBridge.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.0.0" />
+  </ItemGroup>
+
+</Project>
