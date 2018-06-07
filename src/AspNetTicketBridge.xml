@@ -9,7 +9,7 @@
             Converts a v3 ticket to a v5.
             </summary>
         </member>
-        <member name="M:AspNetTicketBridge.MachineKeyTicketUnprotector.UnprotectOAuthToken(System.String,System.String,System.String)">
+        <member name="M:AspNetTicketBridge.MachineKeyTicketUnprotector.UnprotectOAuthToken(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Decodes, decryptes and deseralizes a serialized, protected and encoded 
             AuthenticationTicket created by OWIN's OAuth server implementation.
@@ -19,7 +19,7 @@
             <param name="validationKey">The machineKey validationKey found in your web.config</param>
             <returns>A v3 AuthenticationTicket</returns>
         </member>
-        <member name="M:AspNetTicketBridge.MachineKeyTicketUnprotector.UnprotectCookie(System.String,System.String,System.String)">
+        <member name="M:AspNetTicketBridge.MachineKeyTicketUnprotector.UnprotectCookie(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Decodes, decryptes and deseralizes a serialized, protected and encoded 
             OwinAuthenticationTicket created by OWIN's cookie authentication system.

@@ -13,11 +13,13 @@ namespace AspNetTicketBridge
         /// <param name="decryptionKey">The machineKey decryptionKey found in your web.config</param>
         /// <param name="validationKey">The machineKey validationKey found in your web.config</param>
         /// <returns>A v3 AuthenticationTicket</returns>
-        public static OwinAuthenticationTicket UnprotectOAuthToken(string token, string decryptionKey, string validationKey)
+        public static OwinAuthenticationTicket UnprotectOAuthToken(string token, string decryptionKey, string validationKey, 
+            string decryptionAlgorithm = "AES", string validationAlgorithm = "HMACSHA1")
         {
             var decoded = WebEncoders.Base64UrlDecode(token);
 
-            var unprotected = Unprotect(decoded, decryptionKey, validationKey,
+            var unprotected = Unprotect(decoded, decryptionKey, validationKey, 
+                decryptionAlgorithm, validationAlgorithm,
                 "User.MachineKey.Protect",
                 "Microsoft.Owin.Security.OAuth", "Access_Token", "v1");
 
@@ -34,11 +36,13 @@ namespace AspNetTicketBridge
         /// <param name="decryptionKey">The machineKey decryptionKey found in your web.config</param>
         /// <param name="validationKey">The machineKey validationKey found in your web.config</param>
         /// <returns>A v3 AuthenticationTicket</returns>
-        public static OwinAuthenticationTicket UnprotectCookie(string cookie, string decryptionKey, string validationKey)
+        public static OwinAuthenticationTicket UnprotectCookie(string cookie, string decryptionKey, string validationKey, 
+            string decryptionAlgorithm = "AES", string validationAlgorithm = "HMACSHA1")
         {
             var decoded = WebEncoders.Base64UrlDecode(cookie);
 
             var unprotected = Unprotect(decoded, decryptionKey, validationKey,
+                decryptionAlgorithm, validationAlgorithm,
                 "User.MachineKey.Protect", 
                 "Microsoft.Owin.Security.Cookies.CookieAuthenticationMiddleware", "ApplicationCookie", "v1");
 
@@ -47,9 +51,13 @@ namespace AspNetTicketBridge
             return ticket;
         }
 
-        public static byte[] Unprotect(byte[] decodedData, string decryptionKey, string validationKey, string primaryPurpose, params string[] purposes)
+        public static byte[] Unprotect(byte[] decodedData, string decryptionKey, string validationKey,
+            string decryptionAlgorithm, string validationAlgorithm,
+            string primaryPurpose, params string[] purposes)
         {
-            var unprotected = MachineKey.Unprotect(decodedData, validationKey, decryptionKey, primaryPurpose, purposes);
+            var unprotected = MachineKey.Unprotect(decodedData, validationKey, decryptionKey,
+                decryptionAlgorithm, validationAlgorithm, 
+                primaryPurpose, purposes);
             return unprotected;
         }
     }

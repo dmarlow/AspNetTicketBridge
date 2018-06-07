@@ -10,17 +10,17 @@ namespace AspNetTicketBridge
     {
         private static readonly UTF8Encoding SecureUTF8Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
 
-        public static byte[] Unprotect(byte[] protectedData, string validationKey, string encKey, string primaryPurpose, params string[] specificPurposes)
+        public static byte[] Unprotect(byte[] protectedData, string validationKey, string encKey, string decryptionAlgorithmName, string validationAlgorithmName, string primaryPurpose, params string[] specificPurposes)
         {
             // The entire operation is wrapped in a 'checked' block because any overflows should be treated as failures.
             checked
             {
-                using (SymmetricAlgorithm decryptionAlgorithm = new AesCryptoServiceProvider())
+                using (SymmetricAlgorithm decryptionAlgorithm = CryptoConfig.CreateFromName(decryptionAlgorithmName) as SymmetricAlgorithm)
                 {
                     decryptionAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(encKey), primaryPurpose, specificPurposes);
 
                     // These KeyedHashAlgorithm instances are single-use; we wrap it in a 'using' block.
-                    using (KeyedHashAlgorithm validationAlgorithm = new HMACSHA1())
+                    using (KeyedHashAlgorithm validationAlgorithm = CryptoConfig.CreateFromName(validationAlgorithmName) as KeyedHashAlgorithm)
                     {
                         validationAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(validationKey), primaryPurpose, specificPurposes);
 
