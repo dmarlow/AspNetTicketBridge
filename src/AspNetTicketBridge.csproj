@@ -8,10 +8,10 @@
     <Description>Decrypts MachineKey protected AuthenticationTicket objects created by ASP.NET to be used in ASP.NET Core.</Description>
     <PackageProjectUrl>https://github.com/dmarlow/AspNetTicketBridge</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dmarlow/AspNetTicketBridge.git</RepositoryUrl>
-    <Version>1.2.0</Version>
-    <PackageReleaseNotes>Bug fixes</PackageReleaseNotes>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
-    <FileVersion>1.2.0.0</FileVersion>
+    <Version>1.2.1</Version>
+    <PackageReleaseNotes>Support for unprotecting a refresh token</PackageReleaseNotes>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
+    <FileVersion>1.2.1.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
