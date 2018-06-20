@@ -10,14 +10,80 @@ namespace AspNetTicketBridge
     {
         private static readonly UTF8Encoding SecureUTF8Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
 
-        public static byte[] Unprotect(byte[] protectedData, string validationKey, string encKey, string decryptionAlgorithmName, string validationAlgorithmName, string primaryPurpose, params string[] specificPurposes)
+        public static byte[] Protect(byte[] clearData, string validationKey, string decryptionKey, string decryptionAlgorithmName, string validationAlgorithmName, string primaryPurpose, params string[] specificPurposes)
+        {
+            // The entire operation is wrapped in a 'checked' block because any overflows should be treated as failures.
+            checked
+            {
+
+                // These SymmetricAlgorithm instances are single-use; we wrap it in a 'using' block.
+                using (SymmetricAlgorithm encryptionAlgorithm = CryptoConfig.CreateFromName(decryptionAlgorithmName) as SymmetricAlgorithm)
+                {
+                    // Initialize the algorithm with the specified key and an appropriate IV
+                    encryptionAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(decryptionKey), primaryPurpose, specificPurposes);
+
+
+                    // If the caller didn't ask for a predictable IV, just let the algorithm itself choose one. 
+                    encryptionAlgorithm.GenerateIV();
+                    // IV retrieval
+                    byte[] iv = encryptionAlgorithm.IV;
+
+                    using (MemoryStream memStream = new MemoryStream())
+                    {
+                        memStream.Write(iv, 0, iv.Length);
+
+                        // At this point:
+                        // memStream := IV
+
+                        // Write the encrypted payload to the memory stream.
+                        using (ICryptoTransform encryptor = encryptionAlgorithm.CreateEncryptor())
+                        {
+                            using (CryptoStream cryptoStream = new CryptoStream(memStream, encryptor, CryptoStreamMode.Write))
+                            {
+                                cryptoStream.Write(clearData, 0, clearData.Length);
+                                cryptoStream.FlushFinalBlock();
+
+                                // At this point:
+                                // memStream := IV || Enc(Kenc, IV, clearData)
+
+                                // These KeyedHashAlgorithm instances are single-use; we wrap it in a 'using' block.
+                                using (KeyedHashAlgorithm signingAlgorithm = CryptoConfig.CreateFromName(validationAlgorithmName) as KeyedHashAlgorithm)
+                                {
+                                    // Initialize the algorithm with the specified key
+                                    signingAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(validationKey), primaryPurpose, specificPurposes);
+
+                                    // Compute the signature
+                                    byte[] signature = signingAlgorithm.ComputeHash(memStream.GetBuffer(), 0, (int)memStream.Length);
+
+                                    // At this point:
+                                    // memStream := IV || Enc(Kenc, IV, clearData)
+                                    // signature := Sign(Kval, IV || Enc(Kenc, IV, clearData))
+
+                                    // Append the signature to the encrypted payload
+                                    memStream.Write(signature, 0, signature.Length);
+
+                                    // At this point:
+                                    // memStream := IV || Enc(Kenc, IV, clearData) || Sign(Kval, IV || Enc(Kenc, IV, clearData))
+
+                                    // Algorithm complete
+                                    byte[] protectedData = memStream.ToArray();
+                                    return protectedData;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public static byte[] Unprotect(byte[] protectedData, string validationKey, string decryptionKey, string decryptionAlgorithmName, string validationAlgorithmName, string primaryPurpose, params string[] specificPurposes)
         {
             // The entire operation is wrapped in a 'checked' block because any overflows should be treated as failures.
             checked
             {
                 using (SymmetricAlgorithm decryptionAlgorithm = CryptoConfig.CreateFromName(decryptionAlgorithmName) as SymmetricAlgorithm)
                 {
-                    decryptionAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(encKey), primaryPurpose, specificPurposes);
+                    decryptionAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(decryptionKey), primaryPurpose, specificPurposes);
 
                     // These KeyedHashAlgorithm instances are single-use; we wrap it in a 'using' block.
                     using (KeyedHashAlgorithm validationAlgorithm = CryptoConfig.CreateFromName(validationAlgorithmName) as KeyedHashAlgorithm)
