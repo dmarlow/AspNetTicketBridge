@@ -6,10 +6,24 @@ using System.Text;
 
 namespace AspNetTicketBridge
 {
+    /// <summary>
+    /// Utility class for handling MachineKey Protect/Unprotect.
+    /// </summary>
     public static class MachineKey
     {
         private static readonly UTF8Encoding SecureUTF8Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
 
+        /// <summary>
+        /// Protect some data with the specified params.
+        /// </summary>
+        /// <param name="clearData"></param>
+        /// <param name="validationKey"></param>
+        /// <param name="decryptionKey"></param>
+        /// <param name="decryptionAlgorithmName"></param>
+        /// <param name="validationAlgorithmName"></param>
+        /// <param name="primaryPurpose"></param>
+        /// <param name="specificPurposes"></param>
+        /// <returns></returns>
         public static byte[] Protect(byte[] clearData, string validationKey, string decryptionKey, string decryptionAlgorithmName, string validationAlgorithmName, string primaryPurpose, params string[] specificPurposes)
         {
             // The entire operation is wrapped in a 'checked' block because any overflows should be treated as failures.
@@ -76,6 +90,17 @@ namespace AspNetTicketBridge
             }
         }
 
+        /// <summary>
+        /// Unprotect some data with the specified params.
+        /// </summary>
+        /// <param name="protectedData"></param>
+        /// <param name="validationKey"></param>
+        /// <param name="decryptionKey"></param>
+        /// <param name="decryptionAlgorithmName"></param>
+        /// <param name="validationAlgorithmName"></param>
+        /// <param name="primaryPurpose"></param>
+        /// <param name="specificPurposes"></param>
+        /// <returns></returns>
         public static byte[] Unprotect(byte[] protectedData, string validationKey, string decryptionKey, string decryptionAlgorithmName, string validationAlgorithmName, string primaryPurpose, params string[] specificPurposes)
         {
             // The entire operation is wrapped in a 'checked' block because any overflows should be treated as failures.
