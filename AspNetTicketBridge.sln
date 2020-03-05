@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetTicketBridge", "AspNetTicketBridge.csproj", "{CB7577DB-6FC8-4669-B85A-51DEA419B321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetTicketBridge", "src\AspNetTicketBridge.csproj", "{CB7577DB-6FC8-4669-B85A-51DEA419B321}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

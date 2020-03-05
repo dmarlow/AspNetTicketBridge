@@ -4,19 +4,6 @@
         <name>AspNetTicketBridge</name>
     </assembly>
     <members>
-        <member name="T:AspNetTicketBridge.AspNet4TicketDataFormat">
-            <summary>
-            Class that handles reading and writing to a AspNet 4.X compatible authentication
-            ticket data format.
-            </summary>
-        </member>
-        <member name="M:AspNetTicketBridge.AspNet4TicketDataFormat.#ctor(Microsoft.AspNetCore.DataProtection.IDataProtector)">
-            <summary>
-            Create a new AspNet4TicketDataFormat with a IDataProtector
-            See MachineKeyDataProtector
-            </summary>
-            <param name="protector"></param>
-        </member>
         <member name="T:AspNetTicketBridge.AuthenticationTicketConverter">
             <summary>
             Conversion between AuthenticationTicket (v5)
