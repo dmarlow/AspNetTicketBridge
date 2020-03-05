@@ -4,14 +4,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Dariel Marlow</Authors>
-    <Company>Degreed</Company>
+    <Company></Company>
     <Description>Decrypts MachineKey protected AuthenticationTicket objects created by ASP.NET to be used in ASP.NET Core.</Description>
     <PackageProjectUrl>https://github.com/dmarlow/AspNetTicketBridge</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dmarlow/AspNetTicketBridge.git</RepositoryUrl>
-    <Version>1.4.0</Version>
-    <PackageReleaseNotes>Support ASP.NET 4.x authentication ticket cookies</PackageReleaseNotes>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
+    <Version>1.4.1</Version>
+    <PackageReleaseNotes>Fixed null reference issues</PackageReleaseNotes>
+    <AssemblyVersion>1.4.1.0</AssemblyVersion>
+    <FileVersion>1.4.1.0</FileVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
