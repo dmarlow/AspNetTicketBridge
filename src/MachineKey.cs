@@ -114,7 +114,7 @@ namespace AspNetTicketBridge
                     decryptionAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(decryptionKey), primaryPurpose, specificPurposes);
 
                     // These KeyedHashAlgorithm instances are single-use; we wrap it in a 'using' block.
-                    using (KeyedHashAlgorithm validationAlgorithm = CryptoConfig.CreateFromName(validationAlgorithmName) as KeyedHashAlgorithm)
+                    using (HashAlgorithm validationAlgorithm = CryptoConfig.CreateFromName(validationAlgorithmName) as HashAlgorithm)
                     {
                         if (validationAlgorithm is KeyedHashAlgorithm keydValidationAlgorithm)
                         {
