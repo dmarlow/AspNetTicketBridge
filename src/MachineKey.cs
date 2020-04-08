@@ -61,10 +61,13 @@ namespace AspNetTicketBridge
                                 // memStream := IV || Enc(Kenc, IV, clearData)
 
                                 // These KeyedHashAlgorithm instances are single-use; we wrap it in a 'using' block.
-                                using (KeyedHashAlgorithm signingAlgorithm = CryptoConfig.CreateFromName(validationAlgorithmName) as KeyedHashAlgorithm)
+                                using (HashAlgorithm signingAlgorithm = CryptoConfig.CreateFromName(validationAlgorithmName) as HashAlgorithm)
                                 {
-                                    // Initialize the algorithm with the specified key
-                                    signingAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(validationKey), primaryPurpose, specificPurposes);
+                                    // Initialize the algorithm with the specified key if it's KeyedHashAlgorithm
+                                    if (signingAlgorithm is KeyedHashAlgorithm keydSigningAlgorithm)
+                                    {
+                                        keydSigningAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(validationKey), primaryPurpose, specificPurposes);
+                                    }
 
                                     // Compute the signature
                                     byte[] signature = signingAlgorithm.ComputeHash(memStream.GetBuffer(), 0, (int)memStream.Length);
@@ -111,9 +114,12 @@ namespace AspNetTicketBridge
                     decryptionAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(decryptionKey), primaryPurpose, specificPurposes);
 
                     // These KeyedHashAlgorithm instances are single-use; we wrap it in a 'using' block.
-                    using (KeyedHashAlgorithm validationAlgorithm = CryptoConfig.CreateFromName(validationAlgorithmName) as KeyedHashAlgorithm)
+                    using (HashAlgorithm validationAlgorithm = CryptoConfig.CreateFromName(validationAlgorithmName) as HashAlgorithm)
                     {
-                        validationAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(validationKey), primaryPurpose, specificPurposes);
+                        if (validationAlgorithm is KeyedHashAlgorithm keydValidationAlgorithm)
+                        {
+                            keydValidationAlgorithm.Key = SP800_108.DeriveKey(HexToBinary(validationKey), primaryPurpose, specificPurposes);
+                        }
 
                         int ivByteCount = decryptionAlgorithm.BlockSize / 8;
                         int signatureByteCount = validationAlgorithm.HashSize / 8;
